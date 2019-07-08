@@ -15,7 +15,7 @@ import io.grpc.ManagedChannelBuilder;
 public class Client {
 
     public static void main(String[] args) throws InterruptedException {
-        ManagedChannel channel = ManagedChannelBuilder.forTarget("localhost:10101")
+        ManagedChannel channel = ManagedChannelBuilder.forTarget("35.236.151.255:10101")
                 .usePlaintext()
                 .build();
         NotisServiceGrpc.NotisServiceBlockingStub stub = NotisServiceGrpc.newBlockingStub(channel);
@@ -25,10 +25,10 @@ public class Client {
         System.out.println(response);
 
         long prev = System.currentTimeMillis() / 1000L;
-        prev = prev - 10;
+        prev = prev - 20;
 
         for (int i = 0; i < 100; i++) {
-            long now = System.currentTimeMillis() / 1000L;
+            long now = System.currentTimeMillis() / 1000L - 10;
 
             System.out.println(prev + " - " + now);
             QueryCameraRequest cameraRequest = QueryCameraRequest.newBuilder()

@@ -30,7 +30,7 @@ public class MainApp {
     private static String STORAGE_DB_NAME = null;
     private static int STORAGE_NWORKER = 4;
 
-    private static int RABBIT_NWORKER;
+    private static int SCHEDULE_TIME;
 
     private static String RABBIT_HOST = null;
     private static int RABBIT_PORT = 5672;
@@ -46,7 +46,7 @@ public class MainApp {
         }
 
         RabbitSender.getInstance().initialize(RABBIT_HOST, RABBIT_PORT, RABBIT_QUEUE,
-                RABBIT_NWORKER, RABBIT_USERNAME, RABBIT_PASSWORD);
+                4, RABBIT_USERNAME, RABBIT_PASSWORD);
         RabbitSender.getInstance().serve();
 
         StorageService.getInstance().initialize(STORAGE_CONNECT_URL, STORAGE_DB_NAME, STORAGE_NWORKER);
@@ -60,7 +60,7 @@ public class MainApp {
 
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("FacebookMonitorJob", "com.solis.facebook")
-                .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(10)) // start 00:00 
+                .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(SCHEDULE_TIME)) // start 00:00 
                 .build();
 
         scheduler.scheduleJob(job, trigger);
@@ -88,7 +88,7 @@ public class MainApp {
             STORAGE_DB_NAME = reader.getProperty("storage.dbName");
             STORAGE_NWORKER = reader.getIntegerProperty(configPath, 4);
 
-            RABBIT_NWORKER = reader.getIntegerProperty("rabbit.nWorker", 4);
+            SCHEDULE_TIME = reader.getIntegerProperty("scheduler.second", 5);
             RABBIT_HOST = reader.getProperty("rabbit.host");
             RABBIT_PORT = reader.getIntegerProperty("rabbit.port", 5672);
             RABBIT_QUEUE = reader.getProperty("rabbit.queue");
