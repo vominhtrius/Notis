@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.solis.notis.counter.protobuf";
+
+package solis.notis.counter.protobuf;
+
+import "google/protobuf/any.proto";
+
+message NotisCounterRequest {
+    bytes image = 1;
+}
+
+message NotisCounterResponse {
+	int32 status = 1;
+	int64 counter = 2;
+}
+
+service NotisCounterService {
+	rpc countVehicle(NotisCounterRequest) returns (NotisCounterResponse);
+}
